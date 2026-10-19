@@ -1,18 +1,25 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(GPUEngine
-    VERSION 0.1.0
-    DESCRIPTION "Modular, backend-neutral GPU engine foundation"
+    VERSION 0.2.0
+    DESCRIPTION "Blackwell-inspired compute architecture and GPU CAD engine"
     LANGUAGES CXX
 )
 
 option(GPU_ENGINE_BUILD_TESTS "Build GPU Engine tests" ON)
 
-add_library(gpu_engine src/gpu_engine.cpp)
+add_library(gpu_engine
+    src/gpu_engine.cpp
+    src/math.cpp
+    src/cad.cpp
+    src/gpu_compute.cpp
+)
 add_library(GPUEngine::gpu_engine ALIAS gpu_engine)
 
 target_compile_features(gpu_engine PUBLIC cxx_std_17)
 target_include_directories(gpu_engine PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>)
+
+target_compile_definitions(gpu_engine PUBLIC GPU_ENGINE_API_VERSION_MAJOR=0 GPU_ENGINE_API_VERSION_MINOR=2)
 
 if(MSVC)
     target_compile_options(gpu_engine PRIVATE /W4 /permissive-)
