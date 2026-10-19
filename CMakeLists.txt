@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(GPUEngine
-    VERSION 0.3.0
+    VERSION 0.3.1
     DESCRIPTION "Blackwell-inspired compute architecture and GPU CAD engine"
     LANGUAGES CXX
 )
@@ -17,6 +17,8 @@ add_library(gpu_engine
     src/acceleration.cpp
     src/backend.cpp
     src/vulkan_backend.cpp
+    src/vulkan_device.cpp
+    src/vulkan_buffer.cpp
     src/buffer.cpp
     src/cad_render.cpp
 )
@@ -67,4 +69,8 @@ if(GPU_ENGINE_BUILD_TESTS)
     add_executable(gpu_engine_cad_render_test tests/cad_render_test.cpp)
     target_link_libraries(gpu_engine_cad_render_test PRIVATE GPUEngine::gpu_engine)
     add_test(NAME gpu_engine_cad_render_test COMMAND gpu_engine_cad_render_test)
+
+    add_executable(gpu_engine_vulkan_test tests/vulkan_test.cpp)
+    target_link_libraries(gpu_engine_vulkan_test PRIVATE GPUEngine::gpu_engine)
+    add_test(NAME gpu_engine_vulkan_test COMMAND gpu_engine_vulkan_test)
 endif()
