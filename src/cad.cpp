@@ -1,6 +1,8 @@
 #include "gpu_engine/cad.hpp"
 
+#include <algorithm>
 #include <cmath>
+#include <utility>
 
 namespace gpu_engine::cad {
 
