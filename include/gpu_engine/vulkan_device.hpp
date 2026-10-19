@@ -4,7 +4,6 @@
 
 #include <cstdint>
 #include <memory>
-#include <string>
 
 namespace gpu_engine::vulkan {
 
@@ -30,8 +29,11 @@ public:
     std::uint32_t compute_queue_family() const noexcept;
 
     /// Submit an empty command-buffer batch and wait for the queue to idle.
-    /// This is the first synchronization primitive used by the GPU path.
     Status synchronize() noexcept;
+
+    /// Opaque native handles used by the Vulkan resource layer.
+    void* native_device_handle() const noexcept;
+    void* native_physical_device_handle() const noexcept;
 
 private:
     struct Impl;
