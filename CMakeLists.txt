@@ -18,6 +18,7 @@ add_library(gpu_engine
     src/backend.cpp
     src/vulkan_backend.cpp
     src/buffer.cpp
+    src/cad_render.cpp
 )
 add_library(GPUEngine::gpu_engine ALIAS gpu_engine)
 
@@ -62,4 +63,8 @@ if(GPU_ENGINE_BUILD_TESTS)
     add_executable(gpu_engine_buffer_test tests/buffer_test.cpp)
     target_link_libraries(gpu_engine_buffer_test PRIVATE GPUEngine::gpu_engine)
     add_test(NAME gpu_engine_buffer_test COMMAND gpu_engine_buffer_test)
+
+    add_executable(gpu_engine_cad_render_test tests/cad_render_test.cpp)
+    target_link_libraries(gpu_engine_cad_render_test PRIVATE GPUEngine::gpu_engine)
+    add_test(NAME gpu_engine_cad_render_test COMMAND gpu_engine_cad_render_test)
 endif()
