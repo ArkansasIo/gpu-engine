@@ -13,11 +13,16 @@ struct Hit { bool hit{false}; double t{0}; std::uint32_t triangle{0}; };
 
 class Bvh {
 public:
+    /// Build a median-split BVH from valid triangle indices in the given mesh.
+    /// Invalid triangles are skipped safely. The mesh must remain stable for queries.
     void build(const cad::Mesh& mesh);
+    /// Return the nearest non-negative ray hit, or hit=false when no triangle is hit.
     Hit intersect(const cad::Mesh& mesh, const Ray& ray) const;
     std::size_t node_count() const noexcept { return nodes_.size(); }
 
 private:
+    std::uint32_t build_node(const cad::Mesh& mesh, std::size_t first, std::size_t count);
+
     struct Node {
         cad::Aabb bounds;
         std::uint32_t first{0};
