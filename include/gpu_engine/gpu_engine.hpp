@@ -7,7 +7,7 @@
 namespace gpu_engine {
 
 constexpr std::uint32_t api_version_major = 0;
-constexpr std::uint32_t api_version_minor = 1;
+constexpr std::uint32_t api_version_minor = 3;
 constexpr std::uint32_t api_version_patch = 0;
 
 enum class Backend : std::uint8_t { None, Vulkan, Direct3D12, Metal, WebGPU };
@@ -37,13 +37,8 @@ struct EngineInfo {
     std::uint32_t api_patch{api_version_patch};
 };
 
-/// Return compile-time engine metadata; no GPU SDK or device is required.
 EngineInfo get_engine_info();
-
-/// Returns empty until a hardware backend adapter is implemented.
 std::vector<DeviceCapabilities> enumerate_devices();
-
-/// Convert a backend identifier to a stable human-readable label.
 const char* backend_name(Backend backend) noexcept;
 
 } // namespace gpu_engine
