@@ -1,12 +1,13 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(GPUEngine
-    VERSION 0.2.1
+    VERSION 0.3.0
     DESCRIPTION "Blackwell-inspired compute architecture and GPU CAD engine"
     LANGUAGES CXX
 )
 
 option(GPU_ENGINE_BUILD_TESTS "Build GPU Engine tests" ON)
+option(GPU_ENGINE_ENABLE_VULKAN "Enable Vulkan hardware backend when the SDK is available" ON)
 
 add_library(gpu_engine
     src/gpu_engine.cpp
@@ -14,6 +15,8 @@ add_library(gpu_engine
     src/cad.cpp
     src/gpu_compute.cpp
     src/acceleration.cpp
+    src/backend.cpp
+    src/vulkan_backend.cpp
 )
 add_library(GPUEngine::gpu_engine ALIAS gpu_engine)
 
@@ -25,8 +28,19 @@ target_include_directories(gpu_engine PUBLIC
 
 target_compile_definitions(gpu_engine PUBLIC
     GPU_ENGINE_API_VERSION_MAJOR=0
-    GPU_ENGINE_API_VERSION_MINOR=2
+    GPU_ENGINE_API_VERSION_MINOR=3
 )
+
+if(GPU_ENGINE_ENABLE_VULKAN)
+    find_package(Vulkan QUIET)
+    if(Vulkan_FOUND)
+        target_compile_definitions(gpu_engine PRIVATE GPU_ENGINE_HAS_VULKAN=1)
+        target_link_libraries(gpu_engine PRIVATE Vulkan::Vulkan)
+        message(STATUS "GPU Engine: Vulkan backend enabled")
+    else()
+        message(STATUS "GPU Engine: Vulkan SDK not found; building portable stub backend")
+    endif()
+endif()
 
 if(MSVC)
     target_compile_options(gpu_engine PRIVATE /W4 /permissive-)
@@ -39,4 +53,8 @@ if(GPU_ENGINE_BUILD_TESTS)
     add_executable(gpu_engine_smoke_test tests/smoke_test.cpp)
     target_link_libraries(gpu_engine_smoke_test PRIVATE GPUEngine::gpu_engine)
     add_test(NAME gpu_engine_smoke_test COMMAND gpu_engine_smoke_test)
+
+    add_executable(gpu_engine_backend_test tests/backend_test.cpp)
+    target_link_libraries(gpu_engine_backend_test PRIVATE GPUEngine::gpu_engine)
+    add_test(NAME gpu_engine_backend_test COMMAND gpu_engine_backend_test)
 endif()
