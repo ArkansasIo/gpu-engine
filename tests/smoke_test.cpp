@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <string>
 
 int main() {
     const auto info = gpu_engine::get_engine_info();
@@ -13,8 +14,9 @@ int main() {
         std::cerr << "Unexpected API version\n";
         return EXIT_FAILURE;
     }
-    if (gpu_engine::backend_name(gpu_engine::Backend::Vulkan) == nullptr) {
-        std::cerr << "Backend label must not be null\n";
+    const auto* vulkan_label = gpu_engine::backend_name(gpu_engine::Backend::Vulkan);
+    if (vulkan_label == nullptr || std::string(vulkan_label) != "Vulkan") {
+        std::cerr << "Vulkan backend label mismatch\n";
         return EXIT_FAILURE;
     }
     if (!gpu_engine::enumerate_devices().empty()) {
