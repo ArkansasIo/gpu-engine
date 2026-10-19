@@ -25,7 +25,7 @@ const char* backend_name(Backend backend) noexcept {
     switch (backend) {
     case Backend::None: return "None";
     case Backend::Vulkan: return "Vulkan";
-    case Backend::Direct3D12: return "Direct 3D 12";
+    case Backend::Direct3D12: return "Direct3D 12";
     case Backend::Metal: return "Metal";
     case Backend::WebGPU: return "WebGPU";
     }
